@@ -137,9 +137,10 @@ SELECT * FROM reparto; =>  id | peliculas_id | actores
                           (0 rows)
                         
 
-\copy reparto FROM  '/home/andres/reparto.csv' csv;
+ \copy reparto(peliculas_id,actores) FROM  '/home/andres/reparto.csv' CSV;
+ RETURN => COPY 1051
 
-4. SELECT pelicula,año,director,actores FROM peliculas INNER JOIN reparto on peliculas.id=reparto.id WHERE peliculas.pelicula = 'Titanic'; 
+4. SELECT pelicula,año,director,actores FROM peliculas INNER JOIN reparto on peliculas.id=reparto.peliculas_id WHERE peliculas.pelicula = 'Titanic'; 
    RETURN =   pelicula | año  |   director    |      actores      
               ---------+------+---------------+-------------------
               Titanic  | 1997 | James Cameron | Leonardo DiCaprio
@@ -157,7 +158,7 @@ SELECT * FROM reparto; =>  id | peliculas_id | actores
               Titanic  | 1997 | James Cameron | Suzy Amis
                 (13 rows)
 
-5. SELECT pelicula,actores FROM peliculas INNER JOIN reparto on peliculas.id=reparto.id WHERE reparto.actores='Harrison Ford';
+5. SELECT pelicula,actores FROM peliculas INNER JOIN reparto on peliculas.id=reparto.peliculas_id WHERE reparto.actores='Harrison Ford';
         RETURN =            pelicula                    |    actores    
          -----------------------------------------------+---------------
           Star Wars. Episodio IV: Una nueva esperanza   | Harrison Ford
@@ -193,7 +194,7 @@ LOS 10 DIRECTORES CON MAS PELICULAS EN EL TOP 100
                   831
                 (1 row)
 
-8. SELECT pelicula,año FROM peliculas WHERE año BETWEEN 1990 AND 1999 ORDER BY pelicula ASC;
+8. SELECT pelicula,año FROM peliculas WHERE año BETWEEN '1990' AND '1999' ORDER BY pelicula ASC;
                                                 pelicula                  | año  
                               --------------------------------------------+------
                                American Beauty                            | 1999
@@ -228,7 +229,7 @@ LOS 10 DIRECTORES CON MAS PELICULAS EN EL TOP 100
                                Uno de los nuestros                        | 1990
                                (30 rows)
 
-9. SELECT pelicula,actores FROM peliculas INNER JOIN reparto on peliculas.id=reparto.id WHERE peliculas.año=2001;
+9. SELECT pelicula,actores FROM peliculas INNER JOIN reparto on peliculas.id=reparto.peliculas_id WHERE peliculas.año='2001';
     RETURN =                      pelicula                     |      actores      
              --------------------------------------------------+-------------------
               El Señor de los anillos: La comunidad del anillo | Elijah Wood
@@ -290,34 +291,31 @@ LOS 10 DIRECTORES CON MAS PELICULAS EN EL TOP 100
               Mouling Rouge                                    | Kylie Minogue
                (57 rows)
 
-10. select MAX(año) FROM peliculas;
-        RETURN =     max  
-                    ------
-                    2008
-                    (1 row)
-
-SELECT pelicula,año FROM peliculas WHERE peliculas.año='2008' LIMIT 1; (SE REALIZA ESTE PASO PORQUE HAY 4 PELICULAS DEL 2008)
-                                                 
-      pelicula       | año  
----------------------+------
- El caballero oscuro | 2008
-(1 row)
-
-
-SELECT pelicula,actores FROM reparto INNER JOIN peliculas on peliculas.id=reparto.id WHERE peliculas.pelicula='El caballero oscuro';
-RETURN =         pelicula       |       actores        
-           ---------------------+----------------------
-            El caballero oscuro | Christian Bale
-            El caballero oscuro | Heath Ledger
-            El caballero oscuro | Aaron Eckhart
-            El caballero oscuro | Michael Caine
-            El caballero oscuro | Gary Oldman
-            El caballero oscuro | Maggie Gyllenhaal
-            El caballero oscuro | Morgan Freeman
-            El caballero oscuro | Eric Roberts
-            El caballero oscuro | Cillian Murphy
-            El caballero oscuro | Anthony Michael Hall
-            El caballero oscuro | Michael Jai White
-            El caballero oscuro | William Fichtner
+10. SELECT reparto.actores FROM reparto WHERE peliculas_id IN (SELECT id from peliculas order by año DESC LIMIT 1);
+        RETURN =            actores        
+                        ----------------------
+                        Christian Bale
+                        Heath Ledger
+                        Aaron Eckhart
+                        Michael Caine
+                        Gary Oldman
+                        Maggie Gyllenhaal
+                        Morgan Freeman
+                        Eric Roberts
+                        Cillian Murphy
+                        Anthony Michael Hall
+                        Michael Jai White
+                        William Fichtner
+                        Edison Chen
+                        Monique Curnen
+                        Chin Han
+                        Nestor Carbonell
+                        Ritchie Coster
+                        Keith Szarabajka
+                        Colin McFarlane
+                        Melinda McGraw
+                        Nathan Gamble
+                        Michael Vieau
+                        (22 rows)
 
 REPARTO DE ACTORES DE PELICULA MAS NUEVA
