@@ -10,7 +10,7 @@ DESAFIO 2 DB
 3. CREATE TABLE peliculas(
             id SERIAL, 
             pelicula VARCHAR,
-            año VARCHAR(5),
+            año INT,
             director VARCHAR,
             PRIMARY KEY (id)
             );
@@ -125,12 +125,12 @@ select * from peliculas; =>  id  |                       pelicula               
                              100 | Psicosis                                             | 1960 | Alfred Hitchcock
                                 (100 rows)
 
-CREATE TABLE reparto (
-                        id INT,
-                        peliculas_id SERIAL,
-                        actores VARCHAR,
-                        FOREIGN KEY (peliculas_id) REFERENCES peliculas(id)
-                        );
+CREATE TABLE reparto(
+                    id INT,
+                    peliculas_id SERIAL,
+                    actores VARCHAR,
+                    FOREIGN KEY (peliculas_id) REFERENCES peliculas(id)
+                    );
                         (dejo ID INT ya que si lo seriamos perdemos el orden del dato)
 SELECT * FROM reparto; =>  id | peliculas_id | actores 
                           ----+--------------+---------
@@ -194,7 +194,7 @@ LOS 10 DIRECTORES CON MAS PELICULAS EN EL TOP 100
                   831
                 (1 row)
 
-8. SELECT pelicula,año FROM peliculas WHERE año BETWEEN '1990' AND '1999' ORDER BY pelicula ASC;
+8. SELECT pelicula,año FROM peliculas WHERE año BETWEEN 1990 AND 1999 ORDER BY pelicula ASC;
                                                 pelicula                  | año  
                               --------------------------------------------+------
                                American Beauty                            | 1999
@@ -229,7 +229,7 @@ LOS 10 DIRECTORES CON MAS PELICULAS EN EL TOP 100
                                Uno de los nuestros                        | 1990
                                (30 rows)
 
-9. SELECT pelicula,actores FROM peliculas INNER JOIN reparto on peliculas.id=reparto.peliculas_id WHERE peliculas.año='2001';
+9. SELECT pelicula,actores FROM peliculas INNER JOIN reparto on peliculas.id=reparto.peliculas_id WHERE peliculas.año=2001;
     RETURN =                      pelicula                     |      actores      
              --------------------------------------------------+-------------------
               El Señor de los anillos: La comunidad del anillo | Elijah Wood
